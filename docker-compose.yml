@@ -1,0 +1,40 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: ${POSTGRES_CONTAINER_NAME}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_OUTER_PORT}:5432"
+    volumes:
+      - view-benchmark-postgres-data:/var/lib/postgresql/data
+      - type: bind
+        source: ${PWD}/${DATASET_FILE_NAME}
+        target: /tmp/${DATASET_FILE_NAME}
+
+
+  clickhouse:
+    image: yandex/clickhouse-server
+    container_name: ${CLICKHOUSE_CONTAINER_NAME}
+    environment:
+      - CLICKHOUSE_DB=${CLICKHOUSE_DB}
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
+    ports:
+      - "8123:8123"
+      - "${CLICKHOUSE_NATIVE_OUTER_PORT}:9000"
+    volumes:
+      - view-benchmark-clickhouse-data:/var/lib/clickhouse
+      - type: bind
+        source: ${PWD}/${DATASET_FILE_NAME}
+        target: /tmp/${DATASET_FILE_NAME}
+
+volumes:
+  view-benchmark-postgres-data:
+    external: true
+  view-benchmark-clickhouse-data:
+    external: true
+
