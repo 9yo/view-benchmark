@@ -1,5 +1,5 @@
 # view-benchmark
-Comparing PostgresSQL and Clickhouse for data requests performance in own purposes.
+Comparing PostgreSQL and Clickhouse for performance in own purposes.
 
 ## How to run
 
